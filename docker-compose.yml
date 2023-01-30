@@ -1,0 +1,22 @@
+version: "2"
+
+services:
+  api:
+    build:
+      context: .
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - ${SERVER_LOCAL_PORT}:${SERVER_CONTAINER_PORT}
+    volumes:
+      - ./src/:/app/src/
+  db:
+    image: mysql:8.0
+    ports:
+      - ${MYSQL_PORT}:${MYSQL_PORT}
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - ./mysql:/var/lib/mysql
