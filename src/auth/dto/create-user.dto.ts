@@ -1,7 +1,8 @@
 import { IsString, IsEmail, IsOptional, IsEnum } from 'class-validator';
-import { Role } from '../../auth/enums/roles';
+import { Role } from '../enums/roles';
 
 export class CreateUserDto {
+  // todo: make a real use of this "introspectComments": true
   @IsString()
   name: string;
 

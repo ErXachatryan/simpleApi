@@ -1,7 +1,9 @@
-import { Controller, Post, UseGuards, Req } from '@nestjs/common';
-import { Request } from 'express';
+import { Controller, Post, UseGuards, Body, Req } from '@nestjs/common';
+import { CreateUserDto } from 'src/auth/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { LoginDto } from './dto/login.dto';
+import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -9,13 +11,18 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Req() req: Request): Promise<{ access_token: string }> {
-    // todo: function return type may be replaced with somwthing nicer
+  async login(
+    @Body() loginDto: LoginDto,
+    @Req() req: Request,
+  ): Promise<{ access_token: string }> {
+    // todo: function return type may be replaced with something nicer
     return this.authService.login(req.user);
   }
 
   @Post('register')
-  async register(@Req() req: Request): Promise<{ access_token: string }> {
-    return this.authService.register(req.body);
+  async register(
+    @Body() CreateUserDto: CreateUserDto,
+  ): Promise<{ access_token: string }> {
+    return this.authService.register(CreateUserDto);
   }
 }
