@@ -2,7 +2,7 @@ import { IsString, IsEmail, IsOptional, IsEnum } from 'class-validator';
 import { Role } from '../enums/roles';
 
 export class CreateUserDto {
-  // todo: make a real use of this "introspectComments": true
+  // ToDo: make a real use of this "introspectComments": true
   @IsString()
   name: string;
 
@@ -11,7 +11,7 @@ export class CreateUserDto {
 
   @IsString()
   @IsOptional()
-  middleName: string;
+  middleName?: string;
 
   @IsString()
   username: string;

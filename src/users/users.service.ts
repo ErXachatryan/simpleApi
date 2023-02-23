@@ -9,42 +9,42 @@ import { User } from './entities/user.entity';
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private userRepository: Repository<User>,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    await this.usersRepository.insert(createUserDto);
+    const insert = await this.userRepository.insert(createUserDto);
+    const { id } = insert.identifiers[0];
 
-    return this.findOne(createUserDto.username);
+    return this.findOne(id);
   }
 
   findAll() {
-    return this.usersRepository.find();
+    return this.userRepository.find();
   }
 
-  findOne(username: string): Promise<User> {
-    return this.usersRepository.findOneBy({ username });
+  findOne(props: { id: number } | { username: string }): Promise<User> {
+    // ToDo: parameter list beautify
+    return this.userRepository.findOneBy({ ...props });
   }
 
-  async update(username: string, updateUserDto: UpdateUserDto) {
-    await this.usersRepository.update(
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    await this.userRepository.update(
       {
-        username,
+        id,
       },
       updateUserDto,
     );
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...user } = await this.findOne(
-      updateUserDto.username || username,
-    );
+    const { password, ...user } = await this.findOne({ id });
 
     return user;
   }
 
-  async remove(username: string) {
-    return this.usersRepository.delete({
-      username,
+  async remove(id: number) {
+    return this.userRepository.delete({
+      id,
     });
   }
 }

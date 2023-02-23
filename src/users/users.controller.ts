@@ -14,11 +14,12 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/enums/roles';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(RolesGuard)
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
+@ApiTags('users')
 @Controller('users')
 export class UserController {
   constructor(private readonly usersService: UsersService) {}
@@ -28,23 +29,20 @@ export class UserController {
     return this.usersService.findAll();
   }
 
-  @Get(':username')
-  findOne(@Param('username') username: string): Promise<User> {
-    return this.usersService.findOne(username);
+  @Get(':id')
+  findOne(@Param('id') id: number): Promise<User> {
+    return this.usersService.findOne({ id });
   }
 
-  @Patch(':username')
+  @Patch(':id')
   @Roles(Role.Admin)
-  update(
-    @Param('username') username: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
-    return this.usersService.update(username, updateUserDto);
+  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(id, updateUserDto);
   }
 
-  @Delete(':username')
+  @Delete(':id')
   @Roles(Role.Admin)
-  remove(@Param('username') username: string) {
-    return this.usersService.remove(username);
+  remove(@Param('id') id: number) {
+    return this.usersService.remove(id);
   }
 }

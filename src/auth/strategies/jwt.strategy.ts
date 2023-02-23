@@ -14,7 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    // todo: make a payload interface instead of 'any'
+    // ToDo: make a payload interface instead of 'any'
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { iat, exp, ...user } = payload;
 

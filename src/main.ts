@@ -7,7 +7,7 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const port = app.get(ConfigService).get('SERVER_LOCAL_PORT');
-  const config = new DocumentBuilder() // todo: take this out from here
+  const config = new DocumentBuilder() // ToDo: take this out from here
     .setTitle('A Simple api example')
     .setDescription('A simple API description')
     .addBearerAuth({
@@ -21,7 +21,11 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
   SwaggerModule.setup('api-docs', app, document);
 
   await app.listen(port, () =>

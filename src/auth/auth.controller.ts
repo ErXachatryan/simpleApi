@@ -15,7 +15,7 @@ export class AuthController {
     @Body() loginDto: LoginDto,
     @Req() req: Request,
   ): Promise<{ access_token: string }> {
-    // todo: function return type may be replaced with something nicer
+    // ToDo: function return type may be replaced with something nicer
     return this.authService.login(req.user);
   }
 

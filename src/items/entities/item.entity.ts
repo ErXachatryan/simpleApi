@@ -3,45 +3,34 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
-import { Role } from '../../auth/enums/roles';
 
+@Unique(['name', 'description'])
 @Entity()
-export class User {
+export class Item {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    length: 20,
+  })
   name: string;
 
   @Column()
-  surName: string;
-
-  @Column({
-    nullable: true,
-    default: null,
-  })
-  middleName?: string;
-
-  @Column({
-    unique: true,
-  })
-  username: string;
+  description: string;
 
   @Column()
-  password: string;
+  price: number;
+
+  @Column()
+  amount: number;
 
   @Column({
-    unique: true,
+    default: 'kg',
   })
-  email: string;
-
-  @Column({
-    enum: Role,
-    default: Role.Standard,
-  })
-  role: Role;
+  measure: string;
 
   @CreateDateColumn({
     type: 'timestamp',
