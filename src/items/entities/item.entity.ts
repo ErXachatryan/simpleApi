@@ -1,15 +1,9 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  Unique,
-  UpdateDateColumn,
-} from 'typeorm';
+import { BaseEntity } from 'src/shared/entities/base.entity';
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Unique(['name', 'description'])
 @Entity()
-export class Item {
+export class Item extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -31,17 +25,4 @@ export class Item {
     default: 'kg',
   })
   measure: string;
-
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
-  created_at: Date;
-
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
-  })
-  updated_at: Date;
 }

@@ -1,14 +1,9 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { BaseEntity } from 'src/shared/entities/base.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Role } from '../../auth/enums/roles';
 
 @Entity()
-export class User {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -22,7 +17,7 @@ export class User {
     nullable: true,
     default: null,
   })
-  middleName?: string;
+  middleName: string;
 
   @Column({
     unique: true,
@@ -42,17 +37,4 @@ export class User {
     default: Role.Standard,
   })
   role: Role;
-
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
-  created_at: Date;
-
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
-  })
-  updated_at: Date;
 }
