@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ItemNotFoundError } from 'src/shared/errors/item/itemNotFound';
 import { Repository } from 'typeorm';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
@@ -19,29 +20,37 @@ export class ItemsService {
     return this.findOne(id);
   }
 
-  findAll() {
-    return this.itemRepository.find();
+  async findAll() {
+    const items = await this.itemRepository.find();
+
+    if (items) return items;
+
+    throw new ItemNotFoundError();
   }
 
-  findOne(id: number) {
-    return this.itemRepository.findOneBy({ id });
+  async findOne(id: number) {
+    const item = await this.itemRepository.findOneBy({ id });
+
+    if (item) return item;
+
+    throw new ItemNotFoundError();
   }
 
-  async update(id: number, updateItemDto: UpdateItemDto) {
+  async update(item: Item, updateItemDto: UpdateItemDto) {
     // ToDo: add try catch possibly to all services
     await this.itemRepository.update(
       {
-        id,
+        id: item.id,
       },
       updateItemDto,
     );
 
-    return this.findOne(id);
+    return item;
   }
 
-  remove(id: number) {
+  remove(item: Item) {
     return this.itemRepository.delete({
-      id,
+      id: item.id,
     });
   }
 }

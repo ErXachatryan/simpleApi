@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  UseFilters,
 } from '@nestjs/common';
 import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
@@ -15,8 +16,10 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import { Role } from 'src/auth/enums/roles';
+import { Role } from 'src/shared/enums/roles';
+import { ServiceExceptionFilter } from 'src/shared/filters/serviceExceptionFilter';
 
+@UseFilters(ServiceExceptionFilter)
 @UseGuards(RolesGuard)
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
@@ -27,8 +30,10 @@ export class ItemsController {
 
   @Post()
   @Roles(Role.Admin)
-  create(@Body() createItemDto: CreateItemDto) {
-    return this.itemsService.create(createItemDto);
+  async create(@Body() createItemDto: CreateItemDto) {
+    const item = await this.itemsService.create(createItemDto);
+
+    return this.itemsService.findOne(item.id);
   }
 
   @Get()
@@ -44,13 +49,18 @@ export class ItemsController {
 
   @Patch(':id')
   @Roles(Role.Admin)
-  update(@Param('id') id: number, @Body() updateItemDto: UpdateItemDto) {
-    return this.itemsService.update(id, updateItemDto);
+  async update(@Param('id') id: number, @Body() updateItemDto: UpdateItemDto) {
+    const item = await this.itemsService.findOne(id);
+    const { id: itemId } = await this.itemsService.update(item, updateItemDto);
+
+    return this.itemsService.findOne(itemId);
   }
 
   @Delete(':id')
   @Roles(Role.Admin)
-  remove(@Param('id') id: number) {
-    return this.itemsService.remove(id);
+  async remove(@Param('id') id: number) {
+    const item = await this.itemsService.findOne(id);
+
+    return this.itemsService.remove(item);
   }
 }

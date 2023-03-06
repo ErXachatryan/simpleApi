@@ -12,7 +12,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import { Role } from 'src/auth/enums/roles';
+import { Role } from 'src/shared/enums/roles';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 

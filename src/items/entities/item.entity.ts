@@ -1,5 +1,12 @@
+import { OrderItem } from 'src/orders/entities/order_item.entity';
 import { BaseEntity } from 'src/shared/entities/base.entity';
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 
 @Unique(['name', 'description'])
 @Entity()
@@ -25,4 +32,7 @@ export class Item extends BaseEntity {
     default: 'kg',
   })
   measure: string;
+
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.item)
+  orderItems: OrderItem[];
 }

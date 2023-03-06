@@ -1,6 +1,7 @@
+import { Order } from 'src/orders/entities/order.entity';
 import { BaseEntity } from 'src/shared/entities/base.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { Role } from '../../auth/enums/roles';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Role } from '../../shared/enums/roles';
 
 @Entity()
 export class User extends BaseEntity {
@@ -33,8 +34,12 @@ export class User extends BaseEntity {
   email: string;
 
   @Column({
+    type: 'enum',
     enum: Role,
     default: Role.Standard,
   })
   role: Role;
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 }

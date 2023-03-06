@@ -5,6 +5,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { LocalStrategy } from './auth/strategies/local.strategy';
 import { ItemsModule } from './items/items.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ItemsModule } from './items/items.module';
     UsersModule,
     AuthModule,
     ItemsModule,
+    OrdersModule,
   ],
   providers: [LocalStrategy],
 })

@@ -1,5 +1,5 @@
 import { IsString, IsEmail, IsOptional, IsEnum } from 'class-validator';
-import { Role } from '../enums/roles';
+import { Role } from '../../shared/enums/roles';
 
 export class CreateUserDto {
   // ToDo: make a real use of this "introspectComments": true
